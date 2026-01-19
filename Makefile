@@ -1,47 +1,45 @@
-OS ?= $(shell go env GOOS)
-ARCH ?= $(shell go env GOARCH)
+GO ?= $(shell which go)
+OS ?= $(shell $(GO) env GOOS)
+ARCH ?= $(shell $(GO) env GOARCH)
 
-IMAGE_NAME := cert-manager-webhook-namecheap
-IMAGE_TAG := $(shell git describe --dirty)
-REPO_NAME := kelvie
-PLATFORMS := linux/amd64,linux/arm64
-DOCKER_OPTS :=
+IMAGE_NAME := "webhook"
+IMAGE_TAG := "latest"
 
 OUT := $(shell pwd)/_out
 
-KUBEBUILDER_VERSION=2.3.2
+KUBEBUILDER_VERSION=1.28.0
 
-$(shell mkdir -p "$(OUT)")
+HELM_FILES := $(shell find deploy/example-webhook)
 
-test: _test/kubebuilder
-	go test -v .
+test: _test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH)/etcd _test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH)/kube-apiserver _test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH)/kubectl
+	TEST_ASSET_ETCD=_test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH)/etcd \
+	TEST_ASSET_KUBE_APISERVER=_test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH)/kube-apiserver \
+	TEST_ASSET_KUBECTL=_test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH)/kubectl \
+	$(GO) test -v .
 
-_test/kubebuilder:
-	curl -fsSL https://github.com/kubernetes-sigs/kubebuilder/releases/download/v$(KUBEBUILDER_VERSION)/kubebuilder_$(KUBEBUILDER_VERSION)_$(OS)_$(ARCH).tar.gz -o kubebuilder-tools.tar.gz
-	mkdir -p _test/kubebuilder
-	tar -xvf kubebuilder-tools.tar.gz
-	mv kubebuilder_$(KUBEBUILDER_VERSION)_$(OS)_$(ARCH)/bin _test/kubebuilder/
-	rm kubebuilder-tools.tar.gz
-	rm -R kubebuilder_$(KUBEBUILDER_VERSION)_$(OS)_$(ARCH)
+_test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH).tar.gz: | _test
+	curl -fsSL https://go.kubebuilder.io/test-tools/$(KUBEBUILDER_VERSION)/$(OS)/$(ARCH) -o $@
 
-clean: clean-kubebuilder
+_test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH)/etcd _test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH)/kube-apiserver _test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH)/kubectl: _test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH).tar.gz | _test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH)
+	tar xfO $< kubebuilder/bin/$(notdir $@) > $@ && chmod +x $@
 
-clean-kubebuilder:
-	rm -Rf _test/kubebuilder
+.PHONY: clean
+clean:
+	rm -r _test $(OUT)
 
-tag:
-	docker buildx build $(DOCKER_OPTS) --platform $(PLATFORMS) -t "$(REPO_NAME)/$(IMAGE_NAME):latest" .
-	docker buildx build $(DOCKER_OPTS) --platform $(PLATFORMS) -t "$(REPO_NAME)/$(IMAGE_NAME):$(IMAGE_TAG)" .
-
-push:
-	docker buildx build $(DOCKER_OPTS) --push --platform $(PLATFORMS) -t "$(REPO_NAME)/$(IMAGE_NAME):latest" .
-	docker buildx build $(DOCKER_OPTS) --push --platform $(PLATFORMS) -t "$(REPO_NAME)/$(IMAGE_NAME):$(IMAGE_TAG)" .
-
+.PHONY: build
+build:
+	docker build -t "$(IMAGE_NAME):$(IMAGE_TAG)" .
 
 .PHONY: rendered-manifest.yaml
-rendered-manifest.yaml:
+rendered-manifest.yaml: $(OUT)/rendered-manifest.yaml
+
+$(OUT)/rendered-manifest.yaml: $(HELM_FILES) | $(OUT)
 	helm template \
-	    --name ${IMAGE_NAME} \
-        --set image.repository=$(IMAGE_NAME) \
-        --set image.tag=$(IMAGE_TAG) \
-        deploy/${IMAGE_NAME} > "$(OUT)/rendered-manifest.yaml"
+	    --name example-webhook \
+            --set image.repository=$(IMAGE_NAME) \
+            --set image.tag=$(IMAGE_TAG) \
+            deploy/example-webhook > $@
+
+_test $(OUT) _test/kubebuilder-$(KUBEBUILDER_VERSION)-$(OS)-$(ARCH):
+	mkdir -p $@
