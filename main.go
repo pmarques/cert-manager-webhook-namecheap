@@ -297,7 +297,7 @@ func (c *namecheapDNSProviderSolver) parseChallenge(ch *v1alpha1.ChallengeReques
 ) {
 
 	if zone, err = util.FindZoneByFqdn(
-		ch.ResolvedFQDN, util.RecursiveNameservers,
+		c.ctx, ch.ResolvedFQDN, util.RecursiveNameservers,
 	); err != nil {
 		return "", "", err
 	}
