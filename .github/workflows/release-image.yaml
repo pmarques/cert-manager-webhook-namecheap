@@ -43,19 +43,19 @@ jobs:
           context: .
           push: true
           sbom: true
-          tags: ghcr.io/${{ github.repository }}/${{ github.repository }}:${{ github.sha }}
+          tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
 
       - name: Sign the images with GitHub OIDC Token
         env:
           DIGEST: ${{ steps.docker_build.outputs.digest }}
-          TAGS: ghcr.io/${{ github.repository }}/${{ github.repository }}
+          TAGS: ghcr.io/${{ github.repository }}
         run: cosign sign --yes "${TAGS}@${DIGEST}"
 
       - name: Attest
         uses: actions/attest-build-provenance@00014ed6ed5efc5b1ab7f7f34a39eb55d41aa4f8  # v3.1.0
         id: attest
         with:
-          subject-name: ghcr.io/${{ github.repository }}/${{ github.repository }}
+          subject-name: ghcr.io/${{ github.repository }}
           subject-digest: ${{ steps.docker_build.outputs.digest }}
           push-to-registry: true
 
