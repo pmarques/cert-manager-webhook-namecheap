@@ -12,7 +12,7 @@ on:
 jobs:
   gh_container_registry:
     name: Github Container Registry
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     permissions:
       packages: write
       contents: read
