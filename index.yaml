@@ -1,0 +1,23 @@
+apiVersion: v1
+entries:
+  cert-manager-webhook-namecheap:
+  - apiVersion: v2
+    appVersion: 0.0.2
+    created: "2026-01-24T10:08:18.370134482Z"
+    description: Namecheap Webhook for Cert Manager
+    digest: a51a9a10dc75d17219a57ba08d7da00356cd5d3a44998da4084f808a2193618a
+    name: cert-manager-webhook-namecheap
+    type: application
+    urls:
+    - https://github.com/pmarques/cert-manager-webhook-namecheap/releases/download/cert-manager-webhook-namecheap-0.0.2/cert-manager-webhook-namecheap-0.0.2.tgz
+    version: 0.0.2
+  letsencrypt-namecheap-issuer:
+  - apiVersion: v2
+    created: "2026-01-24T10:08:18.532852634Z"
+    description: Namecheap issuer for Cert Manager
+    digest: 4c25f74c8a39fcf7a62d2810ce5b722dd833460e947745f6efe0c71c49e4dd36
+    name: letsencrypt-namecheap-issuer
+    urls:
+    - https://github.com/pmarques/cert-manager-webhook-namecheap/releases/download/letsencrypt-namecheap-issuer-0.0.2/letsencrypt-namecheap-issuer-0.0.2.tgz
+    version: 0.0.2
+generated: "2026-01-24T10:08:18.532857203Z"
