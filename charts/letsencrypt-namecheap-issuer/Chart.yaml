@@ -2,4 +2,4 @@ apiVersion: v2
 name: letsencrypt-namecheap-issuer
 description: Namecheap issuer for Cert Manager
 
-version: 0.0.1
+version: 0.0.2
