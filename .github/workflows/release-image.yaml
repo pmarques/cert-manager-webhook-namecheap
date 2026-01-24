@@ -6,12 +6,12 @@ on:
     branches:
     - master
     paths-ignore:
-      - 'charts/**'
+    - 'charts/**'
   push:
     branches:
     - master
     paths-ignore:
-      - 'charts/**'
+    - 'charts/**'
 
 jobs:
   gh_container_registry:
