@@ -5,9 +5,13 @@ on:
   pull_request:
     branches:
     - master
+    paths-ignore:
+      - 'charts/**'
   push:
     branches:
     - master
+    paths-ignore:
+      - 'charts/**'
 
 jobs:
   gh_container_registry:
