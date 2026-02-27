@@ -8,6 +8,9 @@ on:
     paths:
       - 'charts/**'
 
+permissions:
+  contents: read
+
 jobs:
   release:
     permissions:

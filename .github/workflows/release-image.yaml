@@ -13,6 +13,9 @@ on:
     paths-ignore:
     - 'charts/**'
 
+permissions:
+  contents: read
+
 jobs:
   gh_container_registry:
     name: Github Container Registry
