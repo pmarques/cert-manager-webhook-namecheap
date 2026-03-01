@@ -16,4 +16,4 @@ If you believe you have found a security vulnerability in any GitHub-owned repos
 
 Please do not report security vulnerabilities through public GitHub issues, discussions, or pull requests.
 
-Instead, please send an email to security[@]pmarques.info.
+Instead, please send an email to security@pmarques.info.
