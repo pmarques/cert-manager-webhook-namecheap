@@ -1,4 +1,4 @@
-module github.com/cert-manager/webhook-example
+module github.com/pmarques/cert-manager-webhook-namecheap
 
 go 1.25.0
 
