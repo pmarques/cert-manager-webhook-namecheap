@@ -4,6 +4,8 @@
 *.dll
 *.so
 *.dylib
+/.idea/
+*.iml
 
 # Test binary, build with `go test -c`
 *.test
@@ -15,5 +17,6 @@
 cert-manager-webhook-namecheap
 
 # Make artifacts
+bin
 _out
 _test
