@@ -1,0 +1,39 @@
+---
+name: CI
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!master'
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    name: Run tests
+    env:
+      TEST_ZONE_NAME: ${{ vars.TEST_ZONE_NAME }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Configure tests
+        run: |
+          cat <<EOF > testdata/namecheap/apikey.yaml
+            apiVersion: v1
+            kind: Secret
+            metadata:
+              name: namecheap-credentials
+            type: Opaque
+            data:
+              apiUser: ${{ secrets.NAMECHEAP_API_USER }}
+              apiKey: ${{ secrets.NAMECHEAP_API_KEY }}
+          EOF
+
+          cp testdata/namecheap/config.json.sample testdata/namecheap/config.json
+ 
+      - run: |
+          make test
