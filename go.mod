@@ -5,10 +5,10 @@ go 1.26.3
 require (
 	github.com/cert-manager/cert-manager v1.21.1
 	github.com/namecheap/go-namecheap-sdk/v2 v2.10.0
-	k8s.io/api v0.36.2 // indirect
+	k8s.io/api v0.36.3 // indirect
 	k8s.io/apiextensions-apiserver v0.36.2
 	k8s.io/apimachinery v0.36.3
-	k8s.io/client-go v0.36.2
+	k8s.io/client-go v0.36.3
 )
 
 require (
