@@ -1,10 +1,10 @@
 module github.com/pmarques/cert-manager-webhook-namecheap
 
-go 1.26.0
+go 1.26.3
 
 require (
 	github.com/cert-manager/cert-manager v1.21.1
-	github.com/namecheap/go-namecheap-sdk/v2 v2.4.1
+	github.com/namecheap/go-namecheap-sdk/v2 v2.10.0
 	k8s.io/api v0.36.2 // indirect
 	k8s.io/apiextensions-apiserver v0.36.2
 	k8s.io/apimachinery v0.36.3
@@ -68,7 +68,7 @@ require (
 	github.com/prometheus/procfs v0.19.2 // indirect
 	github.com/spf13/cobra v1.10.2 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
-	github.com/weppos/publicsuffix-go v0.50.2 // indirect
+	github.com/weppos/publicsuffix-go v0.50.3 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	go.etcd.io/etcd/api/v3 v3.6.8 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.6.8 // indirect
