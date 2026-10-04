@@ -110,7 +110,7 @@ jobs:
           # Create and push the multi-arch manifest list referencing each digest
           docker buildx imagetools create \
             --tag "${IMAGE}:${TAG}" \
-            $(printf '${{ github.repository }}@sha256:%s ' *)
+            $(printf "${IMAGE}@sha256:%s " *)
 
           # Extract the digest of the generated multi-arch manifest index
           DIGEST=$(docker buildx imagetools inspect "${IMAGE}:${TAG}" --format '{{json .Manifest.Digest}}' | tr -d '"')
